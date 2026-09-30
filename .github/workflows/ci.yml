@@ -23,5 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set version
+        id: set_version
+        run: echo "version=$(npm pkg get version --workspaces=false | tr -d '\"')" >> "$GITHUB_OUTPUT"
+
       - name: Lint
         run: npm run lint
