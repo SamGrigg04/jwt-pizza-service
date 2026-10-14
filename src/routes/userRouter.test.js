@@ -108,8 +108,34 @@ test('list users paginated', async () => {
   expect(ids).toEqual(expect.arrayContaining([first.id, second.id]));
 });
 
-// not implemented yet so kinda just getting some coverage
-test('delete user', async () => {
-  const res = await request(app).delete(`/api/user/${diner.user.id}`).set(authHeader(admin.token));
+// no token means no deleting
+// (each delete test registers its own victim so the shared diner never gets deleted)
+test('delete user unauthorized', async () => {
+  const { user } = await registerDiner();
+  const res = await request(app).delete(`/api/user/${user.id}`);
+  expect(res.status).toBe(401);
+});
+
+// diners can't go around deleting people
+test('delete user requires admin', async () => {
+  const { user } = await registerDiner();
+  const res = await request(app).delete(`/api/user/${user.id}`).set(authHeader(diner.token));
+  expect(res.status).toBe(403);
+});
+
+// admin deletes a user, and they're really gone: can't log in, old token is dead, not in the list anymore
+test('admin can delete a user', async () => {
+  const { user, token } = await registerDiner();
+  const res = await request(app).delete(`/api/user/${user.id}`).set(authHeader(admin.token));
   expect(res.status).toBe(200);
+  expect(res.body).toEqual({ message: 'user deleted' });
+
+  const loginRes = await request(app).put('/api/auth').send({ email: user.email, password: user.password });
+  expect(loginRes.status).toBe(404);
+
+  const meRes = await request(app).get('/api/user/me').set(authHeader(token));
+  expect(meRes.status).toBe(401);
+
+  const listRes = await request(app).get(`/api/user?name=${user.name}`).set(authHeader(admin.token));
+  expect(listRes.body.users).toEqual([]);
 });
