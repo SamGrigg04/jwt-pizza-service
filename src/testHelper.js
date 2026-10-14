@@ -27,8 +27,8 @@ async function createAdminUser() {
 }
 
 // registers a diner and returns the user and the token
-async function registerDiner() {
-  const user = { name: randomName(), email: `${randomName()}@diner.com`, password: 'diner' };
+async function registerDiner(name = randomName()) {
+  const user = { name, email: `${randomName()}@diner.com`, password: 'diner' };
   const registerRes = await request(app).post('/api/auth').send(user);
   return { user: { ...registerRes.body.user, password: user.password }, token: registerRes.body.token };
 }

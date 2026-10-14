@@ -54,10 +54,58 @@ test('admin can update another user', async () => {
   expect(res.body.user).toMatchObject({ id: user.id, name, email: user.email });
 });
 
-// not implemented yet so kinda just getting some coverage
+// no token means no list
+test('list users unauthorized', async () => {
+  const res = await request(app).get('/api/user');
+  expect(res.status).toBe(401);
+});
+
+// only admins get to see everybody
+test('list users requires admin', async () => {
+  const res = await request(app).get('/api/user').set(authHeader(diner.token));
+  expect(res.status).toBe(403);
+});
+
+// admin gets a page of users with their roles (and definitely no passwords)
 test('list users', async () => {
   const res = await request(app).get('/api/user').set(authHeader(admin.token));
   expect(res.status).toBe(200);
+  expect(res.body).toMatchObject({ users: expect.any(Array), more: expect.any(Boolean) });
+  expect(res.body.users.length).toBeGreaterThan(0);
+  for (const user of res.body.users) {
+    expect(user).toMatchObject({ id: expect.any(Number), name: expect.any(String), email: expect.any(String), roles: expect.any(Array) });
+    expect(user.password).toBeUndefined();
+  }
+});
+
+// random names are basically unique, so filtering by one should find exactly that user
+// (and * works as a wildcard, like the franchise filter)
+test('list users filtered by name', async () => {
+  const { user } = await registerDiner();
+  const res = await request(app).get(`/api/user?name=${user.name}`).set(authHeader(admin.token));
+  expect(res.status).toBe(200);
+  expect(res.body.users).toEqual([{ id: user.id, name: user.name, email: user.email, roles: [{ role: 'diner' }] }]);
+
+  const wildcardRes = await request(app).get(`/api/user?name=${user.name.slice(0, 6)}*`).set(authHeader(admin.token));
+  expect(wildcardRes.body.users.map((u) => u.id)).toContain(user.id);
+});
+
+// two users share a random prefix, so with limit=1 they should land on separate pages
+test('list users paginated', async () => {
+  const prefix = randomName();
+  const { user: first } = await registerDiner(`${prefix}-1`);
+  const { user: second } = await registerDiner(`${prefix}-2`);
+
+  const page0 = await request(app).get(`/api/user?page=0&limit=1&name=${prefix}*`).set(authHeader(admin.token));
+  expect(page0.body.users.length).toBe(1);
+  expect(page0.body.more).toBe(true);
+
+  const page1 = await request(app).get(`/api/user?page=1&limit=1&name=${prefix}*`).set(authHeader(admin.token));
+  expect(page1.body.users.length).toBe(1);
+  expect(page1.body.more).toBe(false);
+
+  const ids = [page0.body.users[0].id, page1.body.users[0].id];
+  expect(ids).toEqual(expect.arrayContaining([first.id, second.id]));
 });
 
 // not implemented yet so kinda just getting some coverage
