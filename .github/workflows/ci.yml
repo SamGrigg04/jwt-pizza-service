@@ -140,5 +140,5 @@ jobs:
           curl -s -X POST https://orangecougar392.grafana.net/api/annotations \
           -H "Authorization: Bearer ${{ secrets.GRAFANA_ACCESS_TOKEN }}" \
           -H "Content-Type: application/json" \
-          -d '{"dashboardUID":"sgmlv4h", "panelId":"1", "tags":["backend","production"], "text":"Version '"$version"' deployed" }'
+          -d '{"dashboardUID":"sgmlv4h", "panelId":1, "tags":["backend","production"], "text":"Version '"$version"' deployed" }'
 
