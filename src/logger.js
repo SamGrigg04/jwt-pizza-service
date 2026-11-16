@@ -73,6 +73,7 @@ function unhandledErrorLogger(err) {
 }
 
 function sendLogToGrafana(event) {
+  if (process.env.NODE_ENV === "test") return;
   const body = JSON.stringify(event);
   fetch(`${config.logging.endpointUrl}`, {
     method: "post",
