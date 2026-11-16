@@ -5,8 +5,8 @@
     "name": "sgmlv4h",
     "namespace": "stacks-1907142",
     "uid": "0e50f465-6cfa-4b71-9afe-5b31049e94cd",
-    "resourceVersion": "2122409151190335488",
-    "generation": 38,
+    "resourceVersion": "2122416650396004352",
+    "generation": 43,
     "creationTimestamp": "2026-11-07T22:26:29Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "2502983381852160"
@@ -15,7 +15,7 @@
       "grafana.app/createdBy": "user:bg3cuk0qhsnpcf",
       "grafana.app/saved-from-ui": "Grafana Cloud",
       "grafana.app/updatedBy": "user:bg3cuk0qhsnpcf",
-      "grafana.app/updatedTimestamp": "2026-11-16T19:19:08Z"
+      "grafana.app/updatedTimestamp": "2026-11-16T19:48:56Z"
     }
   },
   "spec": {
@@ -1056,7 +1056,7 @@
                       },
                       "spec": {
                         "direction": "backward",
-                        "editorMode": "code",
+                        "editorMode": "builder",
                         "expr": "{component=\"jwt-pizza-service\"} |= `` | json",
                         "key": "Q-28b3fe3c-8199-49b6-bc3a-05d9825830cb-0",
                         "queryType": "range"
@@ -1067,32 +1067,193 @@
                   }
                 }
               ],
-              "transformations": [],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "extractFields",
+                  "spec": {
+                    "disabled": false,
+                    "options": {
+                      "delimiter": ",",
+                      "format": "json",
+                      "source": "Line"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "extractFields",
+                  "spec": {
+                    "disabled": false,
+                    "options": {
+                      "delimiter": ",",
+                      "format": "json",
+                      "source": "labels"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "disabled": false,
+                    "options": {
+                      "excludeByName": {
+                        "Line": true,
+                        "Time": false,
+                        "component": true,
+                        "detected_level": true,
+                        "has_auth_header": true,
+                        "has_auth_header 1": true,
+                        "id": true,
+                        "labelTypes": true,
+                        "labels": true,
+                        "message": true,
+                        "message 1": true,
+                        "method 1": true,
+                        "path 1": true,
+                        "requestBody": true,
+                        "requestBody_diner_email": true,
+                        "requestBody_diner_id": true,
+                        "requestBody_diner_name": true,
+                        "requestBody_order_franchiseId": true,
+                        "requestBody_order_id": true,
+                        "requestBody_order_storeId": true,
+                        "request_body_email": true,
+                        "request_body_franchiseId": true,
+                        "request_body_password": true,
+                        "request_body_storeId": true,
+                        "responseBody": true,
+                        "responseBody_jwt": true,
+                        "responseBody_message": true,
+                        "response_body_jwt": true,
+                        "response_body_message": true,
+                        "response_body_order_franchiseId": true,
+                        "response_body_order_id": true,
+                        "response_body_order_storeId": true,
+                        "response_body_stack": true,
+                        "response_body_token": true,
+                        "response_body_user_email": true,
+                        "response_body_user_id": true,
+                        "response_body_user_name": true,
+                        "response_body_version": true,
+                        "service_name": true,
+                        "sql 1": true,
+                        "stack": true,
+                        "stack 1": true,
+                        "status_code 1": true,
+                        "traceID": true,
+                        "traceID (field)": true,
+                        "tsNs": true,
+                        "user 1": true
+                      },
+                      "includeByName": {},
+                      "indexByName": {
+                        "Line": 11,
+                        "Time": 0,
+                        "component": 18,
+                        "detected_level": 19,
+                        "has_auth_header": 17,
+                        "has_auth_header 1": 20,
+                        "id": 14,
+                        "labelTypes": 13,
+                        "labels": 10,
+                        "level": 1,
+                        "message": 29,
+                        "message 1": 53,
+                        "method": 4,
+                        "method 1": 21,
+                        "path": 5,
+                        "path 1": 22,
+                        "requestBody": 27,
+                        "requestBody_diner_email": 31,
+                        "requestBody_diner_id": 32,
+                        "requestBody_diner_name": 33,
+                        "requestBody_order_franchiseId": 34,
+                        "requestBody_order_id": 35,
+                        "requestBody_order_storeId": 36,
+                        "request_body": 8,
+                        "request_body_email": 46,
+                        "request_body_franchiseId": 38,
+                        "request_body_password": 47,
+                        "request_body_storeId": 39,
+                        "responseBody": 28,
+                        "responseBody_jwt": 41,
+                        "response_body": 9,
+                        "response_body_jwt": 42,
+                        "response_body_message": 23,
+                        "response_body_order_franchiseId": 43,
+                        "response_body_order_id": 44,
+                        "response_body_order_storeId": 45,
+                        "response_body_stack": 52,
+                        "response_body_token": 48,
+                        "response_body_user_email": 49,
+                        "response_body_user_id": 50,
+                        "response_body_user_name": 51,
+                        "response_body_version": 24,
+                        "service_name": 25,
+                        "sql": 7,
+                        "sql 1": 40,
+                        "stack": 30,
+                        "stack 1": 54,
+                        "status_code": 6,
+                        "status_code 1": 26,
+                        "traceID": 15,
+                        "traceID (field)": 16,
+                        "tsNs": 12,
+                        "type": 2,
+                        "user": 3,
+                        "user 1": 37
+                      },
+                      "renameByName": {}
+                    }
+                  }
+                }
+              ],
               "queryOptions": {}
             }
           },
           "vizConfig": {
             "kind": "VizConfig",
-            "group": "logs",
+            "group": "table",
             "version": "13.4.0-43142262336",
             "spec": {
               "options": {
-                "dedupStrategy": "none",
-                "enableInfiniteScrolling": false,
-                "enableLogDetails": true,
-                "prettifyLogMessage": true,
-                "showControls": false,
-                "showFieldSelector": false,
-                "showLevel": true,
-                "showLogAttributes": true,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "timestampResolution": "ms",
-                "unwrappedColumns": false,
-                "wrapLogMessage": false
+                "cellHeight": "sm",
+                "showHeader": true,
+                "showRowNumbers": false,
+                "sortBy": [],
+                "zebraStriping": false
               },
               "fieldConfig": {
-                "defaults": {},
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 80,
+                        "color": "red"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "align": "auto",
+                    "cellOptions": {
+                      "type": "auto"
+                    },
+                    "footer": {
+                      "reducers": []
+                    },
+                    "inspect": false
+                  }
+                },
                 "overrides": []
               }
             }
@@ -1101,15 +1262,16 @@
       }
     },
     "layout": {
-      "kind": "AutoGridLayout",
+      "kind": "GridLayout",
       "spec": {
-        "maxColumnCount": 3,
-        "columnWidthMode": "standard",
-        "rowHeightMode": "standard",
         "items": [
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 9,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-1"
@@ -1117,17 +1279,12 @@
             }
           },
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-2"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
+              "x": 0,
+              "y": 9,
+              "width": 12,
+              "height": 9,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-3"
@@ -1135,8 +1292,25 @@
             }
           },
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
+              "x": 12,
+              "y": 9,
+              "width": 12,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-2"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 18,
+              "width": 12,
+              "height": 9,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-4"
@@ -1144,8 +1318,12 @@
             }
           },
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
+              "x": 12,
+              "y": 18,
+              "width": 12,
+              "height": 9,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-5"
@@ -1153,26 +1331,12 @@
             }
           },
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-6"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
-              "element": {
-                "kind": "ElementReference",
-                "name": "panel-7"
-              }
-            }
-          },
-          {
-            "kind": "AutoGridLayoutItem",
-            "spec": {
+              "x": 0,
+              "y": 27,
+              "width": 10,
+              "height": 15,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-8"
@@ -1180,8 +1344,38 @@
             }
           },
           {
-            "kind": "AutoGridLayoutItem",
+            "kind": "GridLayoutItem",
             "spec": {
+              "x": 10,
+              "y": 27,
+              "width": 14,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 10,
+              "y": 34,
+              "width": 14,
+              "height": 8,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 42,
+              "width": 24,
+              "height": 11,
               "element": {
                 "kind": "ElementReference",
                 "name": "panel-9"
